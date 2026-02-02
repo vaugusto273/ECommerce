@@ -5,7 +5,12 @@ export function list(req, res) {
     const products = returnAll.all();
     return res.status(200).json(products); 
 }
-export function getById(req, res) { return res.json({}); }
+export function getById(req, res) { 
+    const { id } = req.params;
+    const returnById = db.prepare('SELECT * FROM products WHERE id = ?');
+    const product = returnById.get(Number(id));
+    return res.status(200).json({product}); 
+}
 export function create(req, res) { 
     const { category_id, name, desc, image_url } = req.body;
     const stmt = db.prepare(`INSERT INTO products (category_id, name, desc, image_url) VALUES (?, ?, ?, ?)`);
