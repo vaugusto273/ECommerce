@@ -30,4 +30,12 @@ export function update(req, res) {
         message: 200
     }); 
 }
-export function remove(req, res) { return res.status(204).send(); }
+export function remove(req, res) { 
+    const { id } = req.params;
+    const stmt = db.prepare('DELETE FROM products WHERE id = ?')
+    const del = stmt.run(id);
+    return res.status(200).json({
+        message: 'Produto deletado com sucesso',
+        changes: del.changes
+    });
+}
